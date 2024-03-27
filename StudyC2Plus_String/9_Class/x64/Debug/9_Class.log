@@ -1,0 +1,15 @@
+﻿  PhoneShop.cpp
+  main.cpp
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(107,38): warning C4311: '<function-style-cast>': 'int **'에서 'int'(으)로 포인터가 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(107,38): warning C4302: '<function-style-cast>': 'int **'에서 'int'(으)로 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(107,52): warning C4311: '<function-style-cast>': 'int *'에서 'int'(으)로 포인터가 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(107,52): warning C4302: '<function-style-cast>': 'int *'에서 'int'(으)로 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(110,40): warning C4311: '<function-style-cast>': 'int *'에서 'int'(으)로 포인터가 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(110,40): warning C4302: '<function-style-cast>': 'int *'에서 'int'(으)로 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(110,56): warning C4311: '<function-style-cast>': 'int *'에서 'int'(으)로 포인터가 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(110,56): warning C4302: '<function-style-cast>': 'int *'에서 'int'(으)로 잘립니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(137,2): error C2664: 'void printShop(CShop *)': 인수 1을(를) 'CPhoneShop'에서 'CShop *'(으)로 변환할 수 없습니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(137,12): message : 이 변환을 수행할 수 있는 사용 가능한 사용자 정의 변환 연산자가 없거나 연산자를 호출할 수 없습니다.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(93,6): message : 'printShop' 선언을 참조하십시오.
+D:\UnrealProject\StudyC2Plus_C8\9_Class\main.cpp(137,2): message : 인수 목록 '(CPhoneShop)'을(를) 일치시키는 동안
+  코드를 생성하고 있습니다...

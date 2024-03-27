@@ -1,0 +1,3 @@
+name=aaa, math=80, eng=60, lang=70
+name=bbb, math=90, eng=30, lang=40
+name=ccc, math=20, eng=90, lang=80
