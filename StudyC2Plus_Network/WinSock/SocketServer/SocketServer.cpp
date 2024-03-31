@@ -30,9 +30,12 @@ int main() {
 	}
 
 	ZeroMemory(&hints, sizeof(hints));// hints 메모리 초기화
-	hints.ai_family = AF_INET; // IPv4 주소 패밀리를 지정
-	hints.ai_socktype = SOCK_STREAM; // 스트림 소켓을 지정
-	hints.ai_protocol = IPPROTO_TCP; // TCP 프로토콜 을 지정
+	// AF_INET : IPv4 주소 패밀리를 지정
+	hints.ai_family = AF_INET; 
+	// SOCK_STREAM : 스트림 소켓을 지정
+	hints.ai_socktype = SOCK_STREAM;
+	// IPPROTO_TCP : TCP 프로토콜 을 지정
+	hints.ai_protocol = IPPROTO_TCP;
 	// AI_PASSIVE는 "수동적인"이라는 의미를 가지며, 이 옵션을 사용하면 해당 주소가 수동적인 것으로 설정된다
 	// 즉, 주소가 특정 호스트나 인터페이스를 나타내는 것이 아니라, 소켓이 수신 대기 상태
 	// IP 주소 필드를 "0.0.0.0"으로 설정하는 것과 동일

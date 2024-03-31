@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\UnrealProject\WinSock\WinSock\x64\Debug\SocketServer.exe</FullPath>
+      <FullPath>D:\UnrealProject\C2Plus_ClassRef\StudyC2Plus_Network\WinSock\x64\Debug\SocketServer.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
