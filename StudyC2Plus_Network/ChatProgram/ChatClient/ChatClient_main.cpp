@@ -10,7 +10,7 @@
 
 void receiveMessage(SOCKET client)
 {
-    char buffer[DEFAULT_BUFLEN];
+    char buffer[DEFAULT_BUFLEN + 1]; // 버퍼 크기를 1만큼 더 크게 선언
 
     while (true)
     {
@@ -18,7 +18,7 @@ void receiveMessage(SOCKET client)
 
         if (bytesReceived > 0)
         {
-            //buffer[bytesReceived] = '\0';
+            buffer[bytesReceived] = '\0'; // 수신된 데이터 끝에 널 종료 문자 추가
             std::cout << buffer << std::endl;
         }
         else
