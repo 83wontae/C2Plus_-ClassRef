@@ -32,7 +32,13 @@ int main() {
 	ZeroMemory(&hints, sizeof(hints));// hints 메모리 초기화
 	// AF_INET : IPv4 주소 패밀리를 지정
 	hints.ai_family = AF_INET; 
-	// SOCK_STREAM : 스트림 소켓을 지정
+	// SOCK_STREAM (TCP - Transmission Control Protocol):
+	// 연결형 프로토콜로, 신뢰성있는 데이터 전송을 보장합니다.
+	// 연결을 설정하고 데이터를 전송한 후, 연결을 종료하기 전까지 상태를 유지합니다.
+	// 데이터의 순서가 보장되며, 전송되는 데이터에 대한 에러 확인과 재전송을 지원합니다.
+	// 양방향 통신을 지원하며, 스트림 형태로 데이터를 전송합니다.
+	// 연결 설정, 연결 유지, 연결 해제 등의 오버헤드가 있지만, 안정적인 데이터 전송을 보장합니다.
+	// 예시: 웹 브라우징, 파일 전송, 이메일 등에 사용됩니다.
 	hints.ai_socktype = SOCK_STREAM;
 	// IPPROTO_TCP : TCP 프로토콜 을 지정
 	hints.ai_protocol = IPPROTO_TCP;
