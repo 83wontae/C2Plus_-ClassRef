@@ -13,7 +13,7 @@
 const int MAX_CLIENT = 10;
 
 int clientCount = 0;
-std::vector<SOCKET> clients;
+std::vector<SOCKET> clients;// Dynamic하게 유동적인 배열로 변경
 std::mutex mtx;
 
 void broadcastMessage(const char* message, int senderIndex) {

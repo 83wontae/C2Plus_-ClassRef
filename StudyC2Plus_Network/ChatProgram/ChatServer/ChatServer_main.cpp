@@ -138,6 +138,7 @@ int __cdecl main(void)
             mtx.unlock();
 
             std::cout << "Client connected" << std::endl;
+            
             std::thread(clientHandler, clientCount - 1).detach();
         }
         else
