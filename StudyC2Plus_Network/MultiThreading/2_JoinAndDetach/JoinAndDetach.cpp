@@ -31,8 +31,8 @@ int main()
 
 	//t1.join();// t1 thread가 종료될 때까지 main thread를 대기
 
-	//if (t1.joinable())// join이 가능한지 채크
-	//	t1.detach();// t1 thread를 즉시 종료
+	if (t1.joinable())// join이 가능한지 채크
+		t1.detach();// t1 thread를 즉시 종료
 
 	//if(t1.joinable())// join이 가능한지 채크
 	//	t1.join();// 같은 thread를 두번 join을 하면 termination(작업 종료)
