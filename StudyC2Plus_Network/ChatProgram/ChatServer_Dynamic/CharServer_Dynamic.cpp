@@ -41,10 +41,12 @@ void clientHandler(int idx)
         if (bytesReceived <= 0) {
             std::lock_guard<std::mutex> lock(mtx);
 
-            closesocket(clients[idx]);
-            clients.erase(clients.begin() + idx); // std::vector에서 클라이언트 제거
-
-            std::cout << "Client disconnected" << std::endl;
+            // 클라이언트 인덱스가 유효한지 확인
+            if (idx >= 0 && idx < clients.size() && clients[idx] != INVALID_SOCKET) {
+                closesocket(clients[idx]);
+                clients[idx] = INVALID_SOCKET;
+                std::cout << "Client disconnected" << std::endl;
+            }
             break;
         }
 
