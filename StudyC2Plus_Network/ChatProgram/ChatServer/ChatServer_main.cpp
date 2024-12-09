@@ -6,13 +6,13 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
-#define DEFAULT_BUFLEN 512 // ¼ö½Å ¹öÆÛ Å©±â
-#define DEFAULT_PORT "27015" // »ç¿ëÇÒ Æ÷Æ® ¹øÈ£ ¼±¾ğ
+#define DEFAULT_BUFLEN 512 // ìˆ˜ì‹  ë²„í¼ í¬ê¸°
+#define DEFAULT_PORT "27015" // ì‚¬ìš©í•  í¬íŠ¸ ë²ˆí˜¸ ì„ ì–¸
 
 const int MAX_CLIENT = 10;
 
 int clientCount = 0;
-SOCKET clients[MAX_CLIENT];
+SOCKET clients[MAX_CLIENT]; // Socket ì¹´ìš´íŠ¸ ê³ ì •( None Dynamic )
 std::mutex mtx;
 
 void broadcastMessage(const char* message, int sender)
