@@ -3,7 +3,7 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include <vector>
+#include <map>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -13,50 +13,63 @@
 const int MAX_CLIENT = 10;
 
 int clientCount = 0;
-std::vector<SOCKET> clients;// Dynamic하게 유동적인 배열로 변경
+std::map<int, SOCKET> clients; // 클라이언트 소켓을 저장하는 Map
 std::mutex mtx;
 
-void broadcastMessage(const char* message, int senderIndex) {
+void broadcastMessage(const char* message, int senderId) {
     // std::lock_guard : 스코프 기반 락 관리 방식, 함수의 실행이 범위를 벗어날 때 자동으로 락을 해제
     std::lock_guard<std::mutex> lock(mtx); // RAII 기반 락 관리
     int messageLength = strlen(message); // 실제 메시지 길이 계산
 
-    // 클라이언트 벡터를 순회
-    int index = 0; // 현재 인덱스를 추적
-    for (auto& clientSocket : clients) {
-        if (index != senderIndex) {
+    // 클라이언트 Map 순회
+    // C++17 이상 버전 방식
+    for (const auto& [clientId, clientSocket] : clients) {
+        if (clientId != senderId) {
             send(clientSocket, message, messageLength, 0);
         }
-        ++index; // 다음 클라이언트로 인덱스 증가
     }
+
+    /*
+    // C++11/14 버전 방식
+    for (const auto& client : clients) {
+        int clientId = client.first;       // Key (Client ID)
+        SOCKET clientSocket = client.second; // Value (Client Socket)
+        
+        if (clientId != senderId) {
+            send(clientSocket, message, messageLength, 0);
+        }
+    }
+    */
 }
 
-void clientHandler(int idx)
+void clientHandler(int clientId)
 {
     char buffer[DEFAULT_BUFLEN + 1];
 
     while (true) {
-        int bytesReceived = recv(clients[idx], buffer, DEFAULT_BUFLEN, 0);
+        int bytesReceived = recv(clients[clientId], buffer, DEFAULT_BUFLEN, 0);
 
         if (bytesReceived <= 0) {
             std::lock_guard<std::mutex> lock(mtx);
 
-            // 클라이언트 인덱스가 유효한지 확인
-            if (idx >= 0 && idx < clients.size() && clients[idx] != INVALID_SOCKET) {
-                closesocket(clients[idx]);
-                clients[idx] = INVALID_SOCKET;
-                std::cout << "Client disconnected" << std::endl;
+            // 클라이언트 소켓 닫기 및 Map에서 제거
+            if (clients.count(clientId)) {
+                closesocket(clients[clientId]);
+                clients.erase(clientId);
+                std::cout << "Client disconnected: ID " << clientId << std::endl;
             }
             break;
         }
 
         buffer[bytesReceived] = '\0';
-        broadcastMessage(buffer, idx);
+        broadcastMessage(buffer, clientId);
     }
 }
 
 void serverLoop(SOCKET ListenSocket)
 {
+    int clientIdCounter = 0;
+
     while (true)
     {
         // Accept a client socket
@@ -71,13 +84,13 @@ void serverLoop(SOCKET ListenSocket)
             std::lock_guard<std::mutex> lock(mtx); // RAII lock
 
             if (clients.size() < MAX_CLIENT) { // MAX_CLIENT를 필요에 따라 사용하거나 제한을 완전히 제거할 수 있음
-                clients.push_back(ClientSocket);
-                int clientIndex = clients.size() - 1;
+                int clientId = clientIdCounter++;
+                clients[clientId] = ClientSocket;
 
-                std::cout << "Client connected" << std::endl;
+                std::cout << "Client connected: ID " << clientId << std::endl;
 
                 // 스레드에서 클라이언트 핸들러 실행
-                std::thread(clientHandler, clientIndex).detach();
+                std::thread(clientHandler, clientId).detach();
             }
             else {
                 // 클라이언트가 가득 찼으면 소켓 닫기
