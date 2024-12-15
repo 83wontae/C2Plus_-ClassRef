@@ -55,6 +55,40 @@ void clientHandler(int idx)
     }
 }
 
+void serverLoop(SOCKET ListenSocket)
+{
+    while (true)
+    {
+        // Accept a client socket
+        SOCKET ClientSocket = accept(ListenSocket, NULL, NULL);
+        if (ClientSocket == INVALID_SOCKET) {
+            std::cerr << "accept failed with error: " << WSAGetLastError() << std::endl;
+            continue;
+        }
+
+        // RAII를 이용한 락 관리
+        {
+            std::lock_guard<std::mutex> lock(mtx); // RAII lock
+
+            if (clients.size() < MAX_CLIENT) { // MAX_CLIENT를 필요에 따라 사용하거나 제한을 완전히 제거할 수 있음
+                clients.push_back(ClientSocket);
+                int clientIndex = clients.size() - 1;
+
+                std::cout << "Client connected" << std::endl;
+
+                // 스레드에서 클라이언트 핸들러 실행
+                std::thread(clientHandler, clientIndex).detach();
+            }
+            else {
+                // 클라이언트가 가득 찼으면 소켓 닫기
+                closesocket(ClientSocket);
+                std::cout << "Connection refused: server full" << std::endl;
+            }
+        }
+        // `std::lock_guard`의 소멸자로 인해 여기서 자동으로 mtx.unlock() 호출
+    }
+}
+
 int __cdecl main(void)
 {
     WSADATA wsaData;
@@ -118,31 +152,10 @@ int __cdecl main(void)
 
     std::cout << "Chat server started on port " << DEFAULT_PORT << std::endl;
 
-    while (true)
-    {
-        // Accept a client socket
-        SOCKET ClientSocket = accept(ListenSocket, NULL, NULL);
-        if (ClientSocket == INVALID_SOCKET) {
-            std::cerr << "accept failed with error: " << WSAGetLastError() << std::endl;
-            continue;
-        }
+    serverLoop(ListenSocket);
 
-        mtx.lock();
-        if (clients.size() < MAX_CLIENT) { // MAX_CLIENT를 필요에 따라 사용하거나 제한을 완전히 제거할 수 있음
-            clients.push_back(ClientSocket);
-            int clientIndex = clients.size() - 1;
-            mtx.unlock();
-
-            std::cout << "Client connected" << std::endl;
-            std::thread(clientHandler, clientIndex).detach();
-        }
-        else {
-            mtx.unlock();
-            closesocket(ClientSocket);
-            std::cout << "Connection refused: server full" << std::endl;
-        }
-    }
-
+    // 리슨 소켓 정리
+    closesocket(ListenSocket);
     WSACleanup();
 
     return 0;
